@@ -18,20 +18,26 @@
 # USA.
 # http://www.gnu.org/copyleft/gpl.html
 
+import os
 from config import plugin
 from xbmcswift2 import SortMethod
 import resources.lib.catalog as catalog
 
 CHANNELS = ('all', 'M6', 'W9')
 SHOW_BY = ('genre', 'clips')
+MEDIA_PATH = os.path.join(plugin.addon.getAddonInfo('path'), 'resources', 'media')
 
 
 @plugin.route('/')
 def index():
     channels = CHANNELS[int(plugin.get_setting('channels'))]
     if channels == 'all':
-        items = [{'label': 'M6Replay', 'path': plugin.url_for('show_channel', channel='M6')},
-                {'label': 'W9Replay', 'path': plugin.url_for('show_channel', channel='W9')}]
+        items = [{'label': 'M6Replay',
+                  'path': plugin.url_for('show_channel', channel='M6'),
+                  'thumbnail': os.path.join(MEDIA_PATH, 'm6.png')},
+                {'label': 'W9Replay',
+                 'path': plugin.url_for('show_channel', channel='W9'),
+                 'thumbnail': os.path.join(MEDIA_PATH, 'w9.png')}]
         return items
     else:
         return show_channel(channels)
