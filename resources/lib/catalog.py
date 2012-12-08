@@ -89,7 +89,8 @@ def get_catalog(channel):
     full_catalog = get_json(CATALOGUE_URL % code(channel))
     # Only get main genres (no parent)
     genres = [{'id': id_gnr,
-               'label': gnr[u'name']
+               'label': gnr[u'name'],
+               'thumb': url_thumb(gnr),
               } for id_gnr, gnr in full_catalog[u'gnrList'].items() if gnr[u'idParent'] is None]
     # Get programs with visible clips
     programs = [{'id': id_pgm,
