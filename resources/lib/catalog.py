@@ -168,4 +168,4 @@ def get_rtmp_url(playpath):
     #filename = os.path.basename(playpath)
     token_url = encode_playpath(app, playpath, int(time.time()))
     rtmp_url = '/'.join([rtmp, app, token_url])
-    return rtmp_url + ' timeout=10'
+    return rtmp_url + ' swfUrl=http://www.m6replay.fr/rel-3/M6ReplayV3Application-3.swf swfVfy=1 timeout=10'
