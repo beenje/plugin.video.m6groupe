@@ -30,6 +30,8 @@ CATALOGUE_URL = 'http://static.m6replay.fr/catalog/m6group_web/%s/catalogue.json
 CLIP_URL = 'http://static.m6replay.fr/catalog/m6group_web/%s/clip/%s/clip_infos-%s.json'
 IMAGES_URL = 'http://static.m6replay.fr/images/'
 TTL = int(plugin.get_setting('cached_ttl'))
+# Bump the CATALOG_API to force a refresh of the catalog
+CATALOG_API = '1.0'
 
 
 def code(channel):
@@ -82,10 +84,12 @@ def get_date(clp):
 
 
 @plugin.cached(TTL)
-def get_catalog(channel):
+def get_catalog(channel, api):
     """Return a catalog with only the needed information
 
-    This catalog is cached"""
+    This catalog is cached
+    The api argument is used to force a refresh of the catalog
+    """
     full_catalog = get_json(CATALOGUE_URL % code(channel))
     # Only get main genres (no parent)
     genres = [{'id': id_gnr,
@@ -116,14 +120,14 @@ def get_catalog(channel):
 
 def get_genres(channel):
     """Return the list of main genres"""
-    catalog = get_catalog(channel)
+    catalog = get_catalog(channel, CATALOG_API)
     return catalog['genres']
 
 
 def get_programs(channel, id_gnr='all'):
     """Return the list of all programs or
     programs belonging to the specified genre"""
-    catalog = get_catalog(channel)
+    catalog = get_catalog(channel, CATALOG_API)
     all_programs = catalog['programs']
     if id_gnr == 'all':
         return all_programs
@@ -134,7 +138,7 @@ def get_programs(channel, id_gnr='all'):
 def get_clips(channel, id_pgm='all'):
     """Return the list of all clips or
     clips belonging to the specified program"""
-    catalog = get_catalog(channel)
+    catalog = get_catalog(channel, CATALOG_API)
     all_clips = catalog['clips']
     if id_pgm == 'all':
         return all_clips
