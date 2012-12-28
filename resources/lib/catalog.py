@@ -150,9 +150,17 @@ def get_clip_url(channel, clip):
     """Return the playable url of the clip"""
     clip_key = '/'.join([clip[-2:], clip[-4:-2]])
     asset = get_json(CLIP_URL % (code(channel), clip_key, clip))[u'asset']
-    urls = [val[u'url'] for val in asset.values() if val[u'url'].startswith('mp4:')]
-    if urls:
-        return get_rtmp_url(urls[0])
+    urls = [val[u'url'] for val in asset.values()]
+    # Look for a mp4 url
+    for url in urls:
+        if url.startswith('mp4:'):
+            return get_rtmp_url(url)
+    # No mp4 url found, try to convert it from the f4m url
+    for url in urls:
+        if url.endswith('.f4m'):
+            link = 'mp4:production/regienum/' + url.split('/')[-1].replace('.f4m', '.mp4')
+            return get_rtmp_url(link)
+    # No url found
     return None
 
 
