@@ -1,3 +1,7 @@
+[B]Version 2.0.3[/B]
+
+- New branch for frodo
+
 [B]Version 1.0.3[/B]
 
 - Added genre thumbnail thanks to JUL1EN094
