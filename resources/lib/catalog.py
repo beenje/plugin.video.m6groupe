@@ -30,6 +30,10 @@ CATALOGUE_URL = 'http://static.m6replay.fr/catalog/m6group_web/%s/catalogue.json
 CLIP_URL = 'http://static.m6replay.fr/catalog/m6group_web/%s/clip/%s/clip_infos-%s.json'
 IMAGES_URL = 'http://static.m6replay.fr/images/'
 TTL = int(plugin.get_setting('cached_ttl'))
+if plugin.get_setting('swf_verify') == 'true':
+    SWF_VERIFY = ' swfUrl=http://www.m6replay.fr/rel-3/M6ReplayV3Application-3.swf swfVfy=1'
+else:
+    SWF_VERIFY = ''
 # Bump the CATALOG_API to force a refresh of the catalog
 CATALOG_API = '1.0'
 
@@ -185,4 +189,4 @@ def get_rtmp_url(playpath):
     #filename = os.path.basename(playpath)
     token_url = encode_playpath(app, playpath, int(time.time()))
     rtmp_url = '/'.join([rtmp, app, token_url])
-    return rtmp_url + ' swfUrl=http://www.m6replay.fr/rel-3/M6ReplayV3Application-3.swf swfVfy=1 timeout=10'
+    return rtmp_url + SWF_VERIFY + ' timeout=10'
