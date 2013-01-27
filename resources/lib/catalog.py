@@ -22,7 +22,6 @@ import requests
 import time
 import hashlib
 import urlparse
-from datetime import timedelta
 from config import plugin
 
 
@@ -109,7 +108,7 @@ def get_catalog(channel, api):
               'label': ' - '.join([clp[u'programName'], clp[u'clpName']]),
               'desc': clp[u'desc'],
               'date': get_date(clp),
-              'duration': str(timedelta(seconds=clp[u'duration'])),
+              'duration': int(clp[u'duration']) / 60,
               'thumb': url_thumb(clp),
               'id_pgm': str(clp[u'idPgm'])
              } for id_clp, clp in full_catalog[u'clpList'].items() if clp[u'type'] == u'vi']
