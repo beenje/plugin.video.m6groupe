@@ -60,7 +60,11 @@ def url_thumb(item):
 
 def get_id_parent(full_catalog, id_gnr):
     """Return the parent id of gnr"""
-    id_parent = full_catalog[u'gnrList'][id_gnr][u'idParent']
+    try:
+        id_parent = full_catalog[u'gnrList'][id_gnr][u'idParent']
+    except KeyError:
+        # Unknown genre, just return the given id
+        return id_gnr
     if id_parent is None:
         # Genre has no parent
         return id_gnr
