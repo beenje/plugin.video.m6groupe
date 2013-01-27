@@ -104,6 +104,8 @@ def get_catalog(channel, api):
                'label': gnr[u'name'],
                'thumb': url_thumb(gnr),
               } for id_gnr, gnr in full_catalog[u'gnrList'].items() if gnr[u'idParent'] is None]
+    plugin.log.debug('genres:')
+    plugin.log.debug(genres)
     # Get programs with visible clips
     programs = [{'id': id_pgm,
                  'label': pgm[u'name'],
@@ -112,6 +114,8 @@ def get_catalog(channel, api):
                  'clips': pgm[u'clpList'][u'vi'],
                  'id_gnr': get_id_parent(full_catalog, str(pgm[u'idGnr'])),
                 } for id_pgm, pgm in full_catalog[u'pgmList'].items() if pgm[u'clpList'][u'vi']]
+    plugin.log.debug('programs:')
+    plugin.log.debug(programs)
     # Get visible clips
     clips = [{'id': id_clp,
               'label': ' - '.join([clp[u'programName'], clp[u'clpName']]),
@@ -121,6 +125,8 @@ def get_catalog(channel, api):
               'thumb': url_thumb(clp),
               'id_pgm': str(clp[u'idPgm'])
              } for id_clp, clp in full_catalog[u'clpList'].items() if clp[u'type'] == u'vi']
+    plugin.log.debug('clips:')
+    plugin.log.debug(clips)
     return {'genres': genres,
             'programs': programs,
             'clips': clips}
@@ -162,13 +168,16 @@ def get_clip_url(channel, clip):
     # Look for a mp4 url
     for url in urls:
         if url.startswith('mp4:'):
+            plugin.log.debug('mp4 url found')
             return get_rtmp_url(url)
     # No mp4 url found, try to convert it from the f4m url
     for url in urls:
         if url.endswith('.f4m'):
+            plugin.log.debug('using .f4m url')
             link = 'mp4:production/regienum/' + url.split('/')[-1].replace('.f4m', '.mp4')
             return get_rtmp_url(link)
     # No url found
+    plugin.log.debug('no url found')
     return None
 
 
